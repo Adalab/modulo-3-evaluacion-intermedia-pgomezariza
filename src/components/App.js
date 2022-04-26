@@ -10,6 +10,54 @@ function App() {
   
   //VARIABLES DE ESTADO 
   const [data, setData] = useState(quoteList);
+  //console.log(quoteList);
+  const [newQuote, setNewQuote] = useState({
+    quote: '',
+    character: '',
+  });
+  const [search, setSearch] = useState('');
+
+  
+  const handleSearch = (ev) => {
+    setSearch(ev.target.value);
+  };
+
+  const handleNewQuote = (ev) => {
+    setNewQuote({
+      ...newQuote,
+      [ev.target.id]: ev.target.value,
+    });
+  };
+
+  const handleClick = (ev) => {
+    ev.preventDefault();
+    setData([...data, newQuote]);
+    setNewQuote({
+      quote: '',
+      character: '',
+    });
+  };
+
+  const htmlData = data
+
+  .filter(
+    (quote) =>
+      quote.phrase.toLowerCase().includes(search.toLowerCase()) ||
+      quote.character.toLowerCase().includes(search.toLowerCase())
+  )
+
+  .map((quote, i) => {
+    return (
+      <li className="quote__item" key={i}>
+        <p className="quote__name">
+          <label className="quote__label">quote:</label>
+          {quote.phrase}{quote.character}
+        </p>
+      </li>
+    );
+  }); 
+
+
 
   // he aquí el return de la funcion app (lo que renderiza)
   return (
@@ -24,8 +72,8 @@ function App() {
             type="search"
             name="search"
             placeholder="Filtrar listado frases"
-            //onChange={handleSearch}
-            //value={search}
+            onChange={handleSearch}
+            value={search}
           />
         </form>
       </header>
@@ -42,8 +90,8 @@ function App() {
             name="quote"
             id="quote"
             placeholder="Frase"
-            //onChange={handleNewContact}
-            //value={newContact.name}
+            onChange={handleNewQuote}
+            value={newQuote.phrase}
           />
           <input
             className="new-character__input"
@@ -51,14 +99,14 @@ function App() {
             name="character"
             id="character"
             placeholder="Personaje"
-            //onChange={handleNewContact}
-            //value={newContact.name}
+            onChange={handleNewQuote}
+            value={newQuote.character}
           />
           <input
             className="new-quote__btn"
             type="submit"
             value="Añadir nueva frase"
-            //onClick={handleClick}
+            onClick={handleClick}
           />
         </form>
       </main>
